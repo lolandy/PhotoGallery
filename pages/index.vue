@@ -1,10 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import TopBar from "../components/TopBar.vue";
+  import SideNav from "../components/SideNav.vue";
+  import ImageGallery from "../components/ImageGallery.vue";
+</script>
 
 <template>
-  <div>
-    <h1 class="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+  <TopBar />
+
+  <div class="flex justify-between mx-auto">
+    <SideNav />
+    <ImageGallery />
   </div>
 </template>
 
