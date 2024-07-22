@@ -1,83 +1,146 @@
 <script setup lang="ts">
+import { useImageStore } from "~/stores/imageStore";
+
 const route = useRoute();
 const router = useRouter();
-const images = [
-  "/images/IMG_0322.JPEG",
-  "/images/IMG_0323.JPEG",
-  "/images/IMG_0324.JPEG",
-  "/images/IMG_0326.JPEG",
-  "/images/IMG_0327.JPEG",
-  "/images/IMG_0335.JPEG",
-  "/images/IMG_0336.JPEG",
-  "/images/IMG_0339.JPEG",
-  "/images/IMG_0341.JPEG",
-  "/images/IMG_0344.JPEG",
-  "/images/IMG_0348.JPEG",
-  "/images/IMG_0349.JPEG",
-  "/images/IMG_0352.JPEG",
-  "/images/IMG_0353.JPEG",
-];
+const imageStore = useImageStore();
+
+const imageId = ref(parseInt(route.params.id as string));
+
+const imageIndex = computed(() =>
+  imageStore.images.findIndex((image) => image.id === imageId.value),
+);
+
+const image = computed(() =>
+  imageIndex.value > -1 ? imageStore.images[imageIndex.value] : null,
+);
+
+const showPrevButton = computed(() => imageIndex.value > 0);
+const showNextButton = computed(
+  () => imageIndex.value < imageStore.images.length - 1,
+);
 
 const handleClose = () => {
-  router.go(-1);
+  router.push({ name: "index" });
+};
+
+const nextImage = () => {
+  router.push(`${imageStore.images[imageIndex.value + 1].id}`);
+};
+
+const prevImage = () => {
+  router.push(`${imageStore.images[imageIndex.value - 1].id}`);
 };
 </script>
 
 <template>
   <div
-    class="flex overflow-hidden justify-center items-center w-full h-screen backdrop-blur-lg"
+    class="fixed inset-0 flex overflow-hidden justify-center items-center w-full h-screen"
+    v-if="image"
   >
-    <NuxtImg
-      :src="images[parseInt($route.params.id as string)]"
-      class="object-contain h-full absolute"
-      @dragstart.prevent
+    <img
+      class="pointer-events-none select-none object-contain h-full fixed bg-black"
+      :src="image?.url"
     />
 
-    <div class="w-full -z-50">
-      <NuxtImg
-        :src="images[parseInt($route.params.id as string)]"
-        class="w-full"
-      />
+    <div class="w-full -z-50 select-none">
+      <img class="w-full pointer-events-none" :src="image?.url" />
       <div
         class="absolute backdrop-blur-xl w-full h-full inset-0 bg-black bg-opacity-75"
       ></div>
     </div>
 
     <button
-      class="flex absolute left-5 top-5 bg-gray-600 bg-opacity-70 rounded-full hover:bg-gray-800 hover:opacity-70"
+      class="flex justify-end absolute left-5 top-5 bg-gray-600 bg-opacity-70 rounded-full hover:bg-gray-800 hover:opacity-70"
       @click="handleClose"
     >
-      <Icon name="carbon:close" size="40" mode="svg" class="text-white" />
+      <Icon class="text-white" name="carbon:close" size="40" mode="svg" />
     </button>
-    <button
-      class="flex absolute right-5 top-5 bg-gray-600 bg-opacity-70 rounded-full hover:bg-gray-800 hover:opacity-70"
+
+    <div
+      class="absolute right-5 top-5 text-white"
+      @click="imageStore.showInfo = !imageStore.showInfo"
     >
-      <Icon
-        name="material-symbols-light:info-i"
-        size="40"
-        mode="svg"
-        class="text-white"
-      />
-    </button>
+      <button
+        class="flex bg-gray-600 bg-opacity-70 rounded-full hover:bg-gray-800 hover:opacity-70"
+      >
+        <Icon
+          class="z-10"
+          v-show="!imageStore.showInfo"
+          name="material-symbols-light:info-i"
+          size="40"
+          mode="svg"
+        />
+      </button>
+
+      <transition>
+        <div
+          class="cursor-pointer text-center whitespace-nowrap w-52 max-w-52 bg-opacity-60 bg-gray-600 absolute top-0 right-0 py-6 px-4 rounded-[20px]"
+          v-show="imageStore.showInfo"
+        >
+          <h1 class="text-xl">{{ image.name }}</h1>
+          <hr class="my-2" />
+          <p>{{ image.date }}</p>
+          <p>{{ image.location }}</p>
+        </div>
+      </transition>
+    </div>
+
     <button
       class="flex absolute left-5 bg-gray-600 bg-opacity-70 rounded-full top-[calc(50%-2rem)] hover:bg-gray-800 hover:opacity-70"
+      v-if="showPrevButton"
+      @click="prevImage"
     >
       <Icon
+        class="text-white"
         name="carbon:chevron-left"
         size="40"
         mode="svg"
-        class="text-white"
       />
     </button>
+
     <button
-      class="flex absolute right-5 rounded-full top-[calc(50%-2rem)] bg-gray-600 bg-opacity-70 hover:bg-gray-800 hover:opacity-70"
+      class="flex absolute right-5 bg-gray-600 bg-opacity-70 rounded-full top-[calc(50%-2rem)] hover:bg-gray-800 hover:opacity-70"
+      v-if="showNextButton"
+      @click="nextImage"
     >
       <Icon
-        name="carbon:chevron-right"
-        size="40"
-        mode="svg"
         class="text-white"
+        size="40"
+        name="carbon:chevron-right"
+        mode="svg"
       />
     </button>
   </div>
+
+  <div
+    class="flex justify-center bg-black bg-opacity-75 w-full h-screen"
+    v-else
+  >
+    <button
+      class="flex justify-end absolute left-5 top-5 bg-gray-600 bg-opacity-70 rounded-full hover:bg-gray-800 hover:opacity-70"
+      @click="handleClose"
+    >
+      <Icon class="text-white" name="carbon:close" size="40" mode="svg" />
+    </button>
+
+    <div
+      class="flex flex-col justify-center items-center bg-gray-400 w-[40%] h-full"
+    >
+      <Icon name="carbon:no-image" size="100" mode="svg" />
+      <p class="text-2xl mt-4">Image currently unavailiable</p>
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>
