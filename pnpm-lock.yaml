@@ -4095,6 +4095,17 @@ packages:
   vue-bundle-renderer@2.1.0:
     resolution: {integrity: sha512-uZ+5ZJdZ/b43gMblWtcpikY6spJd0nERaM/1RtgioXNfWFbjKlUwrS8HlrddN6T2xtptmOouWclxLUkpgcVX3Q==}
 
+  vue-demi@0.14.10:
+    resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
+    engines: {node: '>=12'}
+    hasBin: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+
   vue-demi@0.14.9:
     resolution: {integrity: sha512-dC1TJMODGM8lxhP6wLToncaDPPNB3biVxxRDuNCYpuXwi70ou7NsGd97KVTJ2omepGId429JZt8oaZKeXbqxwg==}
     engines: {node: '>=12'}
@@ -8937,6 +8948,10 @@ snapshots:
     dependencies:
       ufo: 1.5.4
 
+  vue-demi@0.14.10(vue@3.4.34):
+    dependencies:
+      vue: 3.4.34
+
   vue-demi@0.14.9(vue@3.4.34):
     dependencies:
       vue: 3.4.34
@@ -8959,7 +8974,7 @@ snapshots:
   vuefire@3.1.24(consola@3.2.3)(firebase@10.12.4)(vue@3.4.34):
     dependencies:
       vue: 3.4.34
-      vue-demi: 0.14.9(vue@3.4.34)
+      vue-demi: 0.14.10(vue@3.4.34)
     optionalDependencies:
       consola: 3.2.3
       firebase: 10.12.4

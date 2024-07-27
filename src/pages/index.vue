@@ -6,11 +6,6 @@ import ImageGallery from "../components/ImageGallery.vue";
 
 <template>
   <TopBar />
-
-  <div class="flex justify-between mx-auto">
-    <SideNav />
-    <ImageGallery />
-  </div>
+  <SideNav />
+  <ImageGallery />
 </template>
-
-<style scoped></style>

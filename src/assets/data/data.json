@@ -2,101 +2,115 @@
   "images": [
     {
       "id": 1,
-      "url": "/images/IMG_0322.JPEG",
+      "sourceURL": "/images/IMG_0322.JPEG",
       "name": "City View",
       "date": "Jan 1, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 2,
-      "url": "/images/IMG_0323.JPEG",
+      "sourceURL": "/images/IMG_0323.JPEG",
       "name": "City View",
       "date": "Jan 2, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 3,
-      "url": "/images/IMG_0324.JPEG",
+      "sourceURL": "/images/IMG_0324.JPEG",
       "name": "City View",
       "date": "Jan 3, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 4,
-      "url": "/images/IMG_0326.JPEG",
+      "sourceURL": "/images/IMG_0326.JPEG",
       "name": "City View",
       "date": "Jan 4, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 5,
-      "url": "/images/IMG_0327.JPEG",
+      "sourceURL": "/images/IMG_0327.JPEG",
       "name": "City View",
       "date": "Jan 5, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 6,
-      "url": "/images/IMG_0335.JPEG",
+      "sourceURL": "/images/IMG_0335.JPEG",
       "name": "City View",
       "date": "Jan 6, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 7,
-      "url": "/images/IMG_0336.JPEG",
+      "sourceURL": "/images/IMG_0336.JPEG",
       "name": "City View",
       "date": "Jan 7, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 8,
-      "url": "/images/IMG_0339.JPEG",
+      "sourceURL": "/images/IMG_0339.JPEG",
       "name": "City View",
       "date": "Jan 8, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 9,
-      "url": "/images/IMG_0341.JPEG",
+      "sourceURL": "/images/IMG_0341.JPEG",
       "name": "City View",
       "date": "Jan 9, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 10,
-      "url": "/images/IMG_0344.JPEG",
+      "sourceURL": "/images/IMG_0344.JPEG",
       "name": "City View",
       "date": "Jan 10, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 11,
-      "url": "/images/IMG_0348.JPEG",
+      "sourceURL": "/images/IMG_0348.JPEG",
       "name": "City View",
       "date": "Jan 11, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 12,
-      "url": "/images/IMG_0349.JPEG",
+      "sourceURL": "/images/IMG_0349.JPEG",
       "name": "City View",
       "date": "Jan 12, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 13,
-      "url": "/images/IMG_0352.JPEG",
+      "sourceURL": "/images/IMG_0352.JPEG",
       "name": "City View",
       "date": "Jan 13, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     },
     {
       "id": 14,
-      "url": "/images/IMG_0353.JPEG",
+      "sourceURL": "/images/IMG_0353.JPEG",
       "name": "City View",
       "date": "Jan 14, 2023",
-      "location": "Thessaloniki, Greece"
+      "location": "Thessaloniki, Greece",
+      "firebasePath": ""
     }
   ]
 }

@@ -9,7 +9,17 @@ export default {
     "./src/error.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        shimmer: {
+          from: {'background-position': '100% 0'},
+          to: {'background-position': '-100% 0'}
+        }
+      },
+      animation: {
+        shimmer: 'shimmer 2s linear infinite'
+      }
+    },
   },
   plugins: ["prettier-plugin-tailwindcss"],
 }

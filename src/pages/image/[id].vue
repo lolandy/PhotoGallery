@@ -40,11 +40,11 @@ const prevImage = () => {
   >
     <img
       class="pointer-events-none select-none object-contain h-full fixed bg-black"
-      :src="image?.url"
+      :src="image.sourceURL"
     />
 
     <div class="w-full -z-50 select-none">
-      <img class="w-full pointer-events-none" :src="image?.url" />
+      <img class="w-full pointer-events-none" :src="image.sourceURL" />
       <div
         class="absolute backdrop-blur-xl w-full h-full inset-0 bg-black bg-opacity-75"
       ></div>
