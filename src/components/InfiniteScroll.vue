@@ -8,10 +8,9 @@ const observer = ref();
 const rootElement = ref();
 
 const loadImages = (entries) => {
-  entries.forEach((entry) => {
+  entries.forEach(async (entry) => {
     if (entry.isIntersecting) {
-      console.log("Load Images");
-      imageStore.getImageData();
+      await imageStore.getImageData();
     }
   });
 };
@@ -30,7 +29,9 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  observer.value.unobserve(rootElement.value);
+  if (!noMoreImages) {
+    observer.value.unobserve(rootElement.value);
+  }
 });
 
 watch(noMoreImages, () => {

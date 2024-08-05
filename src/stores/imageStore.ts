@@ -9,13 +9,15 @@ interface ImageData {
   name: string
   firebasePath: string
   sourceURL?: string
+  isLoaded: boolean
 }
 
 export const useImageStore = defineStore("imageStore", {
   state: () => ({
     images: [] as ImageData[],
     showInfo: false,
-    noMoreImages: false
+    noMoreImages: false,
+    scrollPos: 0
   }),
 
   getters: {},
@@ -24,7 +26,7 @@ export const useImageStore = defineStore("imageStore", {
     async getImageData (){
       try {
         const startId = this.images[this.images.length - 1]?.id || 0
-        const lim = 6
+        const lim = 24
         const db = useFirestore()
         const q = query(collection(db, "images"), orderBy("id"), limit(lim), startAfter(startId))
         const snapshot = await getDocs(q)
@@ -34,14 +36,14 @@ export const useImageStore = defineStore("imageStore", {
         }
         
         if (!snapshot.empty){
-          this.processImageData(snapshot.docs.map(doc => doc.data()) as ImageData[])
+          this.processImageData(snapshot.docs.map(doc => ({...doc.data(), "isLoaded": false})) as ImageData[])
         }
       } catch (error){
         console.log("Error fetching image data", error)
       }
     },
 
-    async processImageData(data : ImageData[]){
+    processImageData(data : ImageData[]){
       this.images.push(...data)
 
       const storage = getStorage()
@@ -49,9 +51,7 @@ export const useImageStore = defineStore("imageStore", {
       for (let i = this.images.length - data.length; i < this.images.length; i++){
         getDownloadURL(storageRef(storage, this.images[i].firebasePath))
           .then((url) => 
-            setTimeout(() => {
-              this.images[i].sourceURL = url
-            }, 1000 * (Math.random() * 5) + 1)
+            this.images[i].sourceURL = url
           )
           .catch((error) => {
             console.log("Error fetching image URL for ID:", this.images[i].id, error)

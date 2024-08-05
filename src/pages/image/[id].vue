@@ -31,34 +31,77 @@ const nextImage = () => {
 const prevImage = () => {
   router.push(`${imageStore.images[imageIndex.value - 1].id}`);
 };
+
+const handleKeydown = (event: KeyboardEvent) => {
+  switch (event.key) {
+    case "ArrowLeft":
+      if (showPrevButton.value) {
+        prevImage();
+      }
+      break;
+    case "ArrowRight":
+      if (showNextButton.value) {
+        nextImage();
+      }
+      break;
+    case "Escape":
+      handleClose();
+      break;
+    case "i":
+      imageStore.showInfo = !imageStore.showInfo;
+      break;
+  }
+};
+
+onMounted(async () => {
+  window.addEventListener("keydown", handleKeydown);
+
+  if (
+    imageIndex.value === imageStore.images.length - 2 &&
+    !imageStore.noMoreImages
+  ) {
+    await imageStore.getImageData();
+  }
+
+  // preload
+  const img = new Image();
+  img.src = imageStore.images[imageIndex.value + 1]?.sourceURL || "";
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeydown);
+});
 </script>
 
 <template>
-  <div
-    class="fixed inset-0 flex overflow-hidden justify-center items-center w-full h-screen"
-    v-if="image"
-  >
-    <img
-      class="pointer-events-none select-none object-contain h-full fixed bg-black"
-      :src="image.sourceURL"
-    />
+  <div class="w-full h-screen bg-black fixed inset-0" v-if="image">
+    <div
+      class="w-full h-full flex justify-center overflow-hidden"
+      v-show="image.isLoaded"
+    >
+      <img
+        class="z-40 pointer-events-none select-none object-contain h-full fixed"
+        :src="image.sourceURL"
+        @load="image.isLoaded = true"
+      />
 
-    <div class="w-full -z-50 select-none">
-      <img class="w-full pointer-events-none" :src="image.sourceURL" />
-      <div
-        class="absolute backdrop-blur-xl w-full h-full inset-0 bg-black bg-opacity-75"
-      ></div>
+      <div class="w-full select-none">
+        <img class="w-full pointer-events-none" :src="image.sourceURL" />
+        <div
+          class="absolute backdrop-blur-xl w-full h-full inset-0 bg-black bg-opacity-75"
+        ></div>
+      </div>
     </div>
 
     <button
-      class="flex justify-end absolute left-5 top-5 bg-gray-600 bg-opacity-70 rounded-full hover:bg-gray-800 hover:opacity-70"
+      class="z-50 flex justify-end absolute left-5 top-5 bg-gray-600 bg-opacity-70 rounded-full hover:bg-gray-800 hover:opacity-70"
       @click="handleClose"
     >
       <Icon class="text-white" name="carbon:close" size="40" mode="svg" />
     </button>
 
     <div
-      class="absolute right-5 top-5 text-white"
+      class="z-50 absolute right-5 top-5 text-white"
       @click="imageStore.showInfo = !imageStore.showInfo"
     >
       <button
@@ -87,7 +130,7 @@ const prevImage = () => {
     </div>
 
     <button
-      class="flex absolute left-5 bg-gray-600 bg-opacity-70 rounded-full top-[calc(50%-2rem)] hover:bg-gray-800 hover:opacity-70"
+      class="z-50 flex absolute left-5 bg-gray-600 bg-opacity-70 rounded-full top-[calc(50%-2rem)] hover:bg-gray-800 hover:opacity-70"
       v-if="showPrevButton"
       @click="prevImage"
     >
@@ -100,7 +143,7 @@ const prevImage = () => {
     </button>
 
     <button
-      class="flex absolute right-5 bg-gray-600 bg-opacity-70 rounded-full top-[calc(50%-2rem)] hover:bg-gray-800 hover:opacity-70"
+      class="z-50 flex absolute right-5 bg-gray-600 bg-opacity-70 rounded-full top-[calc(50%-2rem)] hover:bg-gray-800 hover:opacity-70"
       v-if="showNextButton"
       @click="nextImage"
     >
