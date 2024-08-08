@@ -2,25 +2,26 @@
 import { useImageStore } from "~/stores/imageStore";
 
 const imageStore = useImageStore();
+const { images, scrollPos } = storeToRefs(imageStore);
 
 onMounted(() => {
   nextTick(() => {
-    window.scrollTo(0, imageStore.scrollPos);
+    window.scrollTo(0, scrollPos.value);
   });
 });
 
 onBeforeUnmount(() => {
-  imageStore.scrollPos = window.scrollY;
+  scrollPos.value = window.scrollY;
 });
 </script>
 
 <template>
   <div
-    class="relative mx-auto grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-[10px] xl:px-60 px-2 pt-24 pb-2 h-full"
+    class="relative grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2.5 xl:pl-60 px-5 pt-24 pb-2 h-full"
   >
     <div
-      class="aspect-[3/4] overflow-hidden rounded-md"
-      v-for="image in imageStore.images"
+      class="flex-1 aspect-[3/4] overflow-hidden rounded-md"
+      v-for="image in images"
       :key="image.id"
     >
       <NuxtLink
@@ -35,7 +36,7 @@ onBeforeUnmount(() => {
       </NuxtLink>
 
       <div
-        class="animate-shimmer w-[230px] h-full bg-gradient-to-r bg-[length:200%] from-slate-100 from-30% via-gray-200 via-50% to-slate-100 to-70%"
+        class="animate-shimmer h-full bg-gradient-to-r bg-[length:200%] from-slate-100 from-30% via-gray-200 via-50% to-slate-100 to-70%"
         v-if="!image.isLoaded"
       ></div>
     </div>

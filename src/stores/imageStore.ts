@@ -1,61 +1,66 @@
 import { defineStore } from "pinia"
-import { collection, getDocs, orderBy, query, limit, startAfter } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, limit, startAfter, where } from "firebase/firestore";
 import { getStorage, ref as storageRef, getDownloadURL } from "firebase/storage";
 
-interface ImageData {
-  id: number
-  date: string
-  location: string
-  name: string
-  firebasePath: string
-  sourceURL?: string
-  isLoaded: boolean
-}
+import { type ImageData, Categories } from "~/types/types";
 
 export const useImageStore = defineStore("imageStore", {
   state: () => ({
     images: [] as ImageData[],
+    activeCategory: "",
     showInfo: false,
     noMoreImages: false,
-    scrollPos: 0
+    scrollPos: 0,
+    toggleSideNav: false
   }),
 
   getters: {},
 
   actions: {
-    async getImageData (){
+    async getImageData (startId: number, count: number){
       try {
-        const startId = this.images[this.images.length - 1]?.id || 0
-        const lim = 24
         const db = useFirestore()
-        const q = query(collection(db, "images"), orderBy("id"), limit(lim), startAfter(startId))
+        const storage = getStorage()
+
+        let q = query(collection(db, "images"), orderBy("id"), limit(count), startAfter(startId))
+        if (this.activeCategory !== ""){
+          q = query(q, where("location", "==", this.activeCategory))
+        }
+
         const snapshot = await getDocs(q)
 
-        if (snapshot.docs.length < lim){
+        const numNewImages = snapshot.docs.length
+        if (numNewImages < count){
           this.noMoreImages = true
         }
         
-        if (!snapshot.empty){
-          this.processImageData(snapshot.docs.map(doc => ({...doc.data(), "isLoaded": false})) as ImageData[])
+        if (numNewImages > 0){
+          snapshot.forEach((doc) => {
+            this.images.push({...doc.data(), "isLoaded": false} as ImageData)
+          })
+  
+          const newImageData = this.images.slice(this.images.length - numNewImages)
+  
+          for (const newData of newImageData) {
+            getDownloadURL(storageRef(storage, newData.firebasePath))
+              .then((url) => newData.sourceURL = url) 
+          }
         }
       } catch (error){
         console.log("Error fetching image data", error)
       }
     },
 
-    processImageData(data : ImageData[]){
-      this.images.push(...data)
-
-      const storage = getStorage()
-    
-      for (let i = this.images.length - data.length; i < this.images.length; i++){
-        getDownloadURL(storageRef(storage, this.images[i].firebasePath))
-          .then((url) => 
-            this.images[i].sourceURL = url
-          )
-          .catch((error) => {
-            console.log("Error fetching image URL for ID:", this.images[i].id, error)
-          })
+    async changeCategory(category: Categories | ""){
+      if (this.activeCategory !== category){
+        this.activeCategory = category
+        this.noMoreImages = false
+  
+        const oldLen = this.images.length
+        await this.getImageData(0, 24)
+  
+        this.images.splice(0, oldLen)
+        window.scrollTo(0, 0);
       }
     }
   }
